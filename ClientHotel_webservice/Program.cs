@@ -149,9 +149,6 @@ namespace ClientHotel_webservice
                     string urlString4 = "api/rooms";
                     string urlString5 = "api/hotels";
 
-                    
-
-
                     try
                     {
                         
@@ -159,13 +156,9 @@ namespace ClientHotel_webservice
                         HttpResponseMessage response5 = client4.GetAsync(urlString5).Result; 
                         if (response4.IsSuccessStatusCode && response5.IsSuccessStatusCode)
                         {
-                           
-
-                            Console.WriteLine("alle rum:");
+                            Console.WriteLine("Alle hoteller:");
 
                             var rumliste = response4.Content.ReadAsAsync<List<Room>>().Result;
-
-                           
 
                             var hotelliste = response5.Content.ReadAsAsync<List<Hotel>>().Result;
 
@@ -177,11 +170,6 @@ namespace ClientHotel_webservice
                             {
                                 Console.WriteLine($"{item.Address} {item.Name}");
                             }
-
-                            //var rumliste2  = 
-                            //    from r in rumliste
-                            //    join h in hotelliste
-                            //    on r.Hotel_No equals h.Hotel_No
 
                             var rumlisteRoskilde =
                              from h in hotelRoskilde
@@ -195,25 +183,14 @@ namespace ClientHotel_webservice
                                  h.Address
                              };
 
+                            Console.WriteLine("Alle rum på roskilde hotellerne:");
+
                             foreach (var item in rumlisteRoskilde)
                             {
+                                
                                 Console.WriteLine(item);
                             }
-                                
-
-                               
-
-                            //foreach (var item in rumliste)
-                            //{
-                            //    Console.WriteLine($"Rum type: {item.Types} , Pris: {item.Price}, Nummer {item.Room_No}");
-                            //}
-
-
-
-
                         }
-
-
 
                     }
                     catch (Exception e)
@@ -221,14 +198,105 @@ namespace ClientHotel_webservice
                         Console.WriteLine("Der er sket en fejl : " + e.Message);
 
                     }
-                    
+                }
+
+                Console.WriteLine("opg. 4: Put changes in hotel 3:");
+
+                using (var client5 = new HttpClient())
+                {
+                    client5.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                    client5.BaseAddress = new Uri(serverUrl);
+                    client5.DefaultRequestHeaders.Clear();
+
+                    string urlString6 = "api/hotels/3";
+                    try
+                    {
+                        HttpResponseMessage response = client.GetAsync(urlString6).Result;
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var hotel3 = response.Content.ReadAsAsync<Hotel>().Result;
+                            Console.WriteLine("hotel : " + hotel3.Name + " hoteladresse : " + hotel3.Address);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Der er sket en fejl : " + e.Message);
+                    }
+
+                    var myNewHotelName = new Hotel()
+                    {
+                        Hotel_No = 3,
+                        Address = "Inexpensive Road 7 3333 Cheaptown",
+                        Name = "Discount"
+                    };
+
+                    myNewHotelName.Name = " Osvald";
+                  
+                        try
+                        {
+                        var response = client.PutAsJsonAsync<Hotel>("API/Hotels/3", myNewHotelName).Result;
+                        if (response.IsSuccessStatusCode)
+                            {
+                                Console.WriteLine("Du har opdateret et hotel");
+                                Console.WriteLine("Statuskode : " + response.StatusCode);
+                            }
+                            else
+                            {
+                                Console.WriteLine("Fejl, hotellet blev ikke opdateret");
+                                Console.WriteLine("Statuskode : " + response.StatusCode);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine("Der er sket en fejl : " + e.Message);
+                        }
+                    }
+
+                ////Poster nyt hotel i database. Kan kun gøres en gang. 
+
+                //using (var client6 = new HttpClient())
+                //{
+                //    client6.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //    client6.BaseAddress = new Uri(serverUrl);
+                //    client6.DefaultRequestHeaders.Clear();
+
+                //    var myNewHotel = new Hotel()
+                //    {
+                //        Hotel_No = 200,
+                //        Name = "PolleSvane",
+                //        Address = "Svanevej 32, 4000 Roskilde"
+                //    };
+
+                //        try
+                //        {
+                //            var response = client.PostAsJsonAsync<Hotel>("API/Hotels", myNewHotel).Result;
+                //            Console.WriteLine("hotel : " + myNewHotel.Name + " hoteladresse : " + myNewHotel.Address);
+                //        if (response.IsSuccessStatusCode)
+                //            {
+                //                Console.WriteLine("Du har indsat et nyt hotel");
+                //                Console.WriteLine("Post Content: " + response.Content.ReadAsStringAsync());
+                //            }
+                //            else
+                //            {
+                //                Console.WriteLine("Fejl, hotellet blev ikke indsat");
+                //                Console.WriteLine("Statuskode : " + response.StatusCode);
+                //            }
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Console.WriteLine("Der er sket en fejl : " + e.Message);
+                //        }
+                //    }
 
                 }
 
+                
 
                 Console.ReadLine();
             }
 
         }
     }
-}
+
