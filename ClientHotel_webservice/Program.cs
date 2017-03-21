@@ -256,42 +256,42 @@ namespace ClientHotel_webservice
 
             Console.WriteLine("opgave 5:");
 
-            ////Poster nyt hotel i database. Kan kun gøres en gang. 
+            //Poster nyt hotel i database. Kan kun gøres en gang. 
 
-            //using (var client6 = new HttpClient())
-            //{
-            //    client6.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            using (var client6 = new HttpClient())
+            {
+                client6.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            //    client6.BaseAddress = new Uri(serverUrl);
-            //    client6.DefaultRequestHeaders.Clear();
+                client6.BaseAddress = new Uri(serverUrl);
+                client6.DefaultRequestHeaders.Clear();
 
-            //    var myNewHotel = new Hotel()
-            //    {
-            //        Hotel_No = 200,
-            //        Name = "PolleSvane",
-            //        Address = "Svanevej 32, 4000 Roskilde"
-            //    };
+                var myNewHotel = new Hotel()
+                {
+                    Hotel_No = 200,
+                    Name = "PolleSvane",
+                    Address = "Svanevej 32, 4000 Roskilde"
+                };
 
-            //        try
-            //        {
-            //            var response = client.PostAsJsonAsync<Hotel>("API/Hotels", myNewHotel).Result;
-            //            Console.WriteLine("hotel : " + myNewHotel.Name + " hoteladresse : " + myNewHotel.Address);
-            //        if (response.IsSuccessStatusCode)
-            //            {
-            //                Console.WriteLine("Du har indsat et nyt hotel");
-            //                Console.WriteLine("Post Content: " + response.Content.ReadAsStringAsync());
-            //            }
-            //            else
-            //            {
-            //                Console.WriteLine("Fejl, hotellet blev ikke indsat");
-            //                Console.WriteLine("Statuskode : " + response.StatusCode);
-            //            }
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            Console.WriteLine("Der er sket en fejl : " + e.Message);
-            //        }
-            //    }
+                try
+                {
+                    var response = client6.PostAsJsonAsync<Hotel>("API/Hotels", myNewHotel).Result;
+                    Console.WriteLine("hotel : " + myNewHotel.Name + " hoteladresse : " + myNewHotel.Address);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("Du har indsat et nyt hotel");
+                        Console.WriteLine("Post Content: " + response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fejl, hotellet blev ikke indsat");
+                        Console.WriteLine("Statuskode : " + response.StatusCode);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Der er sket en fejl : " + e.Message);
+                }
+            }
 
 
             Console.WriteLine("opgave 6: SLetter hotel 200:");
@@ -325,6 +325,48 @@ namespace ClientHotel_webservice
                 }
             }
 
+            Console.WriteLine("Opgave 7: Indsæt nyt rum i hotel 4:");
+
+            using (var client9 = new HttpClient())
+            {
+                client9.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client9.BaseAddress = new Uri(serverUrl);
+                client9.DefaultRequestHeaders.Clear();
+
+                //string urlstring9 = "api/hotels";
+
+                var roomnyt = new Room()
+                {
+                    Room_No = 96,
+                    Types = "F",
+                    Price = 300,
+                    Hotel_No = 4
+
+                };
+
+
+                try
+                {
+                    var response = client9.PostAsJsonAsync<Room>("API/Rooms", roomnyt).Result;
+                    //HttpResponseMessage response = client9.GetAsync(urlstring9).Result;
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("Du har indsat et nyt Rum");
+                        Console.WriteLine("Post Content: " + response.Content.ReadAsStringAsync());
+                    }
+                    else
+                    {
+                        Console.WriteLine("Fejl, Rummet blev ikke indsat");
+                        Console.WriteLine("Statuskode : " + response.StatusCode);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Der er sket en fejl : " + e.Message);
+                }
+
+            }
 
             Console.ReadLine();
             }
